@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Учебная персональная страница Амгалана Шагжина — техногика и обзорщика гаджетов.">
+    <title>О себе · Техногик и обзорщик гаджетов</title>
+
+    <!-- Основные стили лабораторной работы вынесены во внешний файл. -->
+    <link rel="stylesheet" href="style_lab2.css">
+
+    <!-- Внутренний CSS: требование варианта 12 — высота и шрифт полей формы. -->
+    <style>
+        .form-group input,
+        .form-group textarea {
+            height: 42px;
+            font-family: "Courier New", monospace;
+        }
+
+        .form-group textarea {
+            height: 120px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="page">
+
+    <!-- Inline CSS: требование варианта 12 — text-align: center. -->
+    <header style="text-align: center;">
+        <h1>Амгалан Шагжин</h1>
+        <p>Техногик и обзорщик гаджетов</p>
+    </header>
+
+    <main>
+        <div class="content">
+
+            <div class="avatar-block">
+                <img src="images/SameFhoto.webp"
+                     alt="Аватар Амгалана Шагжина"
+                     width="120"
+                     height="120">
+                <p>Привет! Я тестирую гаджеты и помогаю выбрать технику.</p>
+            </div>
+
+            <section class="skills-section">
+                <h2>Навыки</h2>
+                <div class="skills-grid">
+                    <div class="skill-card featured">
+                        <span class="top-badge">TOP</span>
+                        <h3>Тестирование устройств</h3>
+                        <p>Проверка смартфонов, ноутбуков и другой техники.</p>
+                    </div>
+
+                    <div class="skill-card">
+                        <h3>Обзоры</h3>
+                        <p>Подробные обзоры и объективное описание возможностей.</p>
+                    </div>
+
+                    <div class="skill-card">
+                        <h3>Сравнение</h3>
+                        <p>Сопоставление характеристик и анализ конкурентов.</p>
+                    </div>
+
+                    <div class="skill-card">
+                        <h3>Измерения</h3>
+                        <p>Работа с измерительным оборудованием.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Проекты</h2>
+                <ol>
+                    <li>Обзор флагманского смартфона <strong>Galaxy S24 Ultra</strong>: тесты камеры, автономности и производительности.</li>
+                    <li>Сравнительный анализ <strong>MacBook Pro 16&quot; M3 Max</strong> и <strong>Dell XPS 17</strong> для творческих задач.</li>
+                    <li>Долгосрочный тест <strong>Sony WH-1000XM5</strong>: шумоподавление, комфорт и качество звука.</li>
+                    <li>Обзор портативной консоли <strong>Steam Deck OLED</strong>: игровая производительность и время работы.</li>
+                </ol>
+            </section>
+
+            <section class="form-section">
+                <h2>Обратная связь</h2>
+
+                <form action="#" method="post">
+                    <div class="form-group">
+                        <label for="name">Имя</label>
+                        <input type="text" id="name" name="name"
+                               placeholder="Ваше имя" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email"
+                               placeholder="Ваш email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Сообщение</label>
+                        <textarea id="message" name="message"
+                                  placeholder="Комментарий..." required></textarea>
+                    </div>
+
+                    <button type="submit">Отправить</button>
+                </form>
+            </section>
+        </div>
+
+        <aside>
+            <h3>Любимые технологии</h3>
+            <ul>
+                <li><a href="https://www.apple.com/" target="_blank" rel="noopener noreferrer">Apple</a></li>
+                <li><a href="https://www.sony.com/" target="_blank" rel="noopener noreferrer">Sony</a></li>
+                <li><a href="https://www.nvidia.com/" target="_blank" rel="noopener noreferrer">NVIDIA</a></li>
+                <li>Категория: флагманские смартфоны</li>
+                <li>Категория: портативные аудиоплееры</li>
+            </ul>
+
+            <p>
+                Состояния ссылок: <code>:hover</code> — наведение,
+                <code>:active</code> — нажатие,
+                <code>:focus</code> — клавиатурный фокус,
+                <code>:visited</code> — посещённая ссылка.
+            </p>
+        </aside>
+    </main>
+
+    <footer>
+        <span>Шагжин Амгалан</span>
+        <span class="year">2026</span>
+    </footer>
+
+</div>
+</body>
+</html>
