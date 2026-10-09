@@ -1,4 +1,4 @@
-# 932402.SHAGZHIN.AMGALAN
+# SHAGZHIN.AMGALAN.932402
 
 ## Учебный проект по веб-разработке
 
