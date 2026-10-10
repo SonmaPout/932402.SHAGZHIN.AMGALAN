@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Персональная страница Амгалана Шагжина: техногик и обзорщик гаджетов. Лабораторная работа №3 — Flexbox и Grid.">
+    <title>ЛР3 · Техногик и обзорщик гаджетов</title>
+    <link rel="stylesheet" href="style_lab3.css">
+
+    <style>
+        .form-group input,
+        .form-group textarea {
+            height: 42px;
+            font-family: "Courier New", monospace;
+        }
+
+        .form-group textarea {
+            height: 120px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="page">
+    <header style="text-align: center;">
+        <p class="eyebrow">Персональная страница · Лабораторная №3</p>
+        <h1>Амгалан Шагжин</h1>
+        <p>Техногик и обзорщик гаджетов</p>
+    </header>
+
+    <nav class="main-nav" aria-label="Основная навигация">
+        <a href="#about">О проекте</a>
+        <a href="#gadgets">Гаджеты недели</a>
+        <a href="#comparison">Сравнение</a>
+        <a href="#projects">Проекты</a>
+        <a href="#feedback">Обратная связь</a>
+    </nav>
+
+    <main>
+        <div class="content">
+            <section id="about" class="intro-section section-block">
+                <div class="avatar-block">
+                    <img src="assets/images/tech-avatar.svg"
+                         alt="Иллюстрация аватара техногика"
+                         width="120" height="120">
+                    <div>
+                        <h2>О проекте</h2>
+                        <p>Я тестирую гаджеты, сравниваю их характеристики и разбираюсь, какие технологии действительно полезны в повседневной жизни.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="gadgets" class="section-block">
+                <h2>Гаджеты недели</h2>
+                <p class="section-lead">Четыре устройства и их ключевые особенности.</p>
+
+                <div class="gadgets-flex">
+                    <article class="gadget-card">
+                        <div class="gadget-image smartphone" role="img" aria-label="Стилизованная иллюстрация смартфона">
+                            <span>PHONE</span>
+                        </div>
+                        <div class="gadget-card-body">
+                            <p class="gadget-category">Смартфон</p>
+                            <h3>Galaxy S24 Ultra</h3>
+                            <p class="gadget-feature">Ключевая фишка: камера с большим зумом и высокая производительность.</p>
+                            <a class="details-link" href="#comparison">Сравнить характеристики <span aria-hidden="true">→</span></a>
+                        </div>
+                    </article>
+
+                    <article class="gadget-card">
+                        <div class="gadget-image laptop" role="img" aria-label="Стилизованная иллюстрация ноутбука">
+                            <span>LAPTOP</span>
+                        </div>
+                        <div class="gadget-card-body">
+                            <p class="gadget-category">Ноутбук</p>
+                            <h3>MacBook Pro 16</h3>
+                            <p class="gadget-feature">Ключевая фишка: мощная платформа для профессиональных задач и творчества.</p>
+                            <a class="details-link" href="#comparison">Сравнить характеристики <span aria-hidden="true">→</span></a>
+                        </div>
+                    </article>
+
+                    <article class="gadget-card">
+                        <div class="gadget-image headphones" role="img" aria-label="Стилизованная иллюстрация наушников">
+                            <span>AUDIO</span>
+                        </div>
+                        <div class="gadget-card-body">
+                            <p class="gadget-category">Наушники</p>
+                            <h3>Sony WH-1000XM5</h3>
+                            <p class="gadget-feature">Ключевая фишка: активное шумоподавление и комфорт при длительном прослушивании.</p>
+                            <a class="details-link" href="#comparison">Сравнить характеристики <span aria-hidden="true">→</span></a>
+                        </div>
+                    </article>
+
+                    <article class="gadget-card">
+                        <div class="gadget-image console" role="img" aria-label="Стилизованная иллюстрация портативной игровой консоли">
+                            <span>GAMING</span>
+                        </div>
+                        <div class="gadget-card-body">
+                            <p class="gadget-category">Игровая консоль</p>
+                            <h3>Steam Deck OLED</h3>
+                            <p class="gadget-feature">Ключевая фишка: портативный игровой формат и OLED-дисплей.</p>
+                            <a class="details-link" href="#comparison">Сравнить характеристики <span aria-hidden="true">→</span></a>
+                        </div>
+                    </article>
+                </div>
+                <p class="image-note">Иллюстрации гаджетов созданы средствами CSS и не являются фотографиями товаров.</p>
+            </section>
+
+            <section id="comparison" class="section-block">
+                <h2>Сравнение характеристик</h2>
+                <p class="section-lead">Три блока: процессор, экран и батарея. Числовые данные размечены элементом <code>&lt;data&gt;</code>.</p>
+
+                <div class="comparison-grid">
+                    <article class="comparison-card">
+                        <div class="comparison-icon" aria-hidden="true">CPU</div>
+                        <h3>Процессор</h3>
+                        <p>Частота — только один из параметров производительности; данные приведены как учебные ориентиры.</p>
+                        <dl class="data-list">
+                            <div class="data-value">
+                                <dt>Galaxy S24 Ultra</dt>
+                                <dd><data value="3200">до 3,2 ГГц</data></dd>
+                            </div>
+                            <div class="data-value">
+                                <dt>MacBook Pro 16</dt>
+                                <dd><data value="4050">до 4,05 ГГц</data></dd>
+                            </div>
+                            <div class="data-value">
+                                <dt>Steam Deck OLED</dt>
+                                <dd><data value="3500">до 3,5 ГГц</data></dd>
+                            </div>
+                        </dl>
+                    </article>
+
+                    <article class="comparison-card">
+                        <div class="comparison-icon" aria-hidden="true">DISPLAY</div>
+                        <h3>Экран</h3>
+                        <p>Разрешение влияет на детализацию изображения; формат и диагональ устройств отличаются.</p>
+                        <dl class="data-list">
+                            <div class="data-value">
+                                <dt>Galaxy S24 Ultra</dt>
+                                <dd><data value="3120">3120 × 1440</data></dd>
+                            </div>
+                            <div class="data-value">
+                                <dt>MacBook Pro 16</dt>
+                                <dd><data value="3456">3456 × 2234</data></dd>
+                            </div>
+                            <div class="data-value">
+                                <dt>Steam Deck OLED</dt>
+                                <dd><data value="1280">1280 × 800</data></dd>
+                            </div>
+                        </dl>
+                    </article>
+
+                    <article class="comparison-card">
+                        <div class="comparison-icon" aria-hidden="true">BATTERY</div>
+                        <h3>Батарея</h3>
+                        <p>Ёмкость батареи и время работы — разные показатели, поэтому единицы измерения подписаны.</p>
+                        <dl class="data-list">
+                            <div class="data-value">
+                                <dt>Galaxy S24 Ultra</dt>
+                                <dd><data value="5000">5000 мА·ч</data></dd>
+                            </div>
+                            <div class="data-value">
+                                <dt>MacBook Pro 16</dt>
+                                <dd><data value="22">до 22 ч*</data></dd>
+                            </div>
+                            <div class="data-value">
+                                <dt>Steam Deck OLED</dt>
+                                <dd><data value="12">до 12 ч*</data></dd>
+                            </div>
+                        </dl>
+                        <p class="data-footnote">* Время работы зависит от нагрузки и настроек.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section id="projects" class="section-block">
+                <h2>Проекты</h2>
+                <ol>
+                    <li>Обзор <strong>Galaxy S24 Ultra</strong>: камера, автономность и производительность.</li>
+                    <li>Сравнительный анализ <strong>MacBook Pro 16</strong> и других ноутбуков для творческих задач.</li>
+                    <li>Долгосрочный тест <strong>Sony WH-1000XM5</strong>: шумоподавление и качество звука.</li>
+                    <li>Обзор <strong>Steam Deck OLED</strong>: портативный игровой опыт.</li>
+                </ol>
+            </section>
+
+            <section id="feedback" class="form-section section-block">
+                <h2>Обратная связь</h2>
+                <form action="#" method="post">
+                    <div class="form-group">
+                        <label for="name">Имя</label>
+                        <input type="text" id="name" name="name" placeholder="Ваше имя" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Ваш email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Сообщение</label>
+                        <textarea id="message" name="message" placeholder="Комментарий..." required></textarea>
+                    </div>
+                    <button type="submit">Отправить</button>
+                </form>
+            </section>
+        </div>
+
+        <aside>
+            <h2>Любимые технологии</h2>
+            <ul>
+                <li><a href="https://www.apple.com/" target="_blank" rel="noopener noreferrer">Apple</a></li>
+                <li><a href="https://www.sony.com/" target="_blank" rel="noopener noreferrer">Sony</a></li>
+                <li><a href="https://www.nvidia.com/" target="_blank" rel="noopener noreferrer">NVIDIA</a></li>
+            </ul>
+            <p>Проект продолжает ЛР2: сохраняются серебристо-чёрная палитра, CSS-переменные, состояния ссылок, стили формы и металлические эффекты.</p>
+            <div class="aside-note">
+                <strong>В этой работе</strong>
+                <span>Flexbox — меню и карточки.</span>
+                <span>Grid — сравнение характеристик.</span>
+                <span>Media queries — адаптивность.</span>
+            </div>
+        </aside>
+    </main>
+
+    <footer>
+        <span>Шагжин Амгалан · Группа 932402</span>
+        <span class="year">2026</span>
+    </footer>
+</div>
+</body>
+</html>
