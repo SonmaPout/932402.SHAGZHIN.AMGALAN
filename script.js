@@ -1,6 +1,5 @@
 'use strict';
 
-// Время автономной работы гаджетов в часах.
 const gadgets = [
     { name: 'Galaxy S24 Ultra', hours: 13 },
     { name: 'MacBook Pro 16', hours: 22 },
@@ -11,10 +10,8 @@ const gadgets = [
     { name: 'Игровая консоль', hours: 4 }
 ];
 
-// Массив из семи числовых значений.
 const batteryHours = gadgets.map(gadget => gadget.hours);
 
-// Ввод имени и приветствие.
 const enteredName = prompt('Как вас зовут?');
 const userName = enteredName && enteredName.trim()
     ? enteredName.trim()
@@ -23,7 +20,6 @@ const userName = enteredName && enteredName.trim()
 alert(`Привет, ${userName}! Добро пожаловать в обзор автономности гаджетов.`);
 console.log(`Пользователь: ${userName}`);
 
-// Функция поиска максимума.
 function findMaximum(numbers) {
     if (numbers.length === 0) {
         return null;
@@ -40,12 +36,10 @@ function findMaximum(numbers) {
     return maximum;
 }
 
-// Функция фильтрации: время работы больше 8 часов.
 function filterLongLivers(devices) {
     return devices.filter(device => device.hours > 8);
 }
 
-// Функция подсчёта суммы.
 function calculateSum(numbers) {
     let sum = 0;
 
@@ -56,13 +50,11 @@ function calculateSum(numbers) {
     return sum;
 }
 
-// Основные вычисления.
 const totalHours = calculateSum(batteryHours);
 const averageHours = totalHours / batteryHours.length;
 const longLivers = filterLongLivers(gadgets);
 const maximumHours = findMaximum(batteryHours);
 
-// Вывод среднего значения и числа долгожителей.
 const averageText = Number.isInteger(averageHours)
     ? String(averageHours)
     : averageHours.toFixed(1).replace('.', ',');
@@ -72,7 +64,6 @@ alert(
     `${longLivers.length} устройств – долгожители.`
 );
 
-// Вывод результатов в консоль.
 console.log('Время автономной работы:', batteryHours);
 console.log('Максимальное время работы:', maximumHours, 'ч.');
 console.log('Сумма часов:', totalHours, 'ч.');
@@ -81,7 +72,6 @@ console.log(
     longLivers.map(device => `${device.name} — ${device.hours} ч.`)
 );
 
-// Цикл: поиск устройств со временем работы ≤ 4 часов.
 const lowBatteryDevices = [];
 
 for (let i = 0; i < gadgets.length; i++) {
@@ -90,7 +80,6 @@ for (let i = 0; i < gadgets.length; i++) {
     }
 }
 
-// Расчёт количества и доли устройств с малым временем работы.
 const lowBatteryCount = lowBatteryDevices.length;
 const lowBatteryShare =
     (lowBatteryCount / gadgets.length) * 100;
@@ -108,7 +97,6 @@ console.log(
     lowBatteryDevices.map(device => `${device.name} — ${device.hours} ч.`)
 );
 
-// Дополнительное условие энергоэффективности.
 if (averageHours < 6) {
     console.log('Стоит обратить внимание на энергоэффективность');
 } else {
