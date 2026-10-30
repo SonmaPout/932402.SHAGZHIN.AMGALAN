@@ -1,115 +1,257 @@
 'use strict';
 
-const gadgets = [
-    { name: 'Galaxy S24 Ultra', hours: 13 },
-    { name: 'MacBook Pro 16', hours: 22 },
-    { name: 'Sony WH-1000XM5', hours: 30 },
-    { name: 'Steam Deck OLED', hours: 8 },
-    { name: 'Планшет', hours: 10 },
-    { name: 'Умные часы', hours: 36 },
-    { name: 'Игровая консоль', hours: 4 }
+const STORAGE_KEYS = {
+    gadgets: 'lab5-gadgets',
+    theme: 'lab5-theme',
+    hidden: 'lab5-list-hidden'
+};
+
+const defaultGadgets = [
+    {
+        name: 'Galaxy S24 Ultra',
+        specs: ['Экран: 6,8 дюйма Dynamic AMOLED', 'Камера: 200 Мп', 'Аккумулятор: 5000 мА·ч']
+    },
+    {
+        name: 'MacBook Pro 16',
+        specs: ['Процессор: Apple M3 Pro', 'Экран: Liquid Retina XDR', 'Память: 18 ГБ']
+    },
+    {
+        name: 'Sony WH-1000XM5',
+        specs: ['Тип: беспроводные наушники', 'Шумоподавление: активное', 'Автономность: до 30 часов']
+    },
+    {
+        name: 'Steam Deck OLED',
+        specs: ['Экран: 7,4 дюйма OLED', 'Память: 512 ГБ', 'Частота обновления: до 90 Гц']
+    }
 ];
 
-const batteryHours = gadgets.map(gadget => gadget.hours);
+function getElementByIdChecked(id) {
+    const element = document.getElementById(id);
 
-const enteredName = prompt('Как вас зовут?');
-const userName = enteredName && enteredName.trim()
-    ? enteredName.trim()
-    : 'Техногик';
-
-alert(`Привет, ${userName}! Добро пожаловать в обзор автономности гаджетов.`);
-console.log(`Пользователь: ${userName}`);
-
-function findMaximum(numbers) {
-    if (numbers.length === 0) {
+    if (!element) {
+        console.error(`Элемент не найден: #${id}`);
         return null;
     }
 
-    let maximum = numbers[0];
+    return element;
+}
 
-    for (let i = 1; i < numbers.length; i++) {
-        if (numbers[i] > maximum) {
-            maximum = numbers[i];
-        }
+function readStoredGadgets() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEYS.gadgets);
+        return saved ? JSON.parse(saved) : defaultGadgets;
+    } catch (error) {
+        console.error('Не удалось прочитать список гаджетов:', error);
+        return defaultGadgets;
+    }
+}
+
+let gadgets = readStoredGadgets();
+
+function saveGadgets() {
+    try {
+        localStorage.setItem(STORAGE_KEYS.gadgets, JSON.stringify(gadgets));
+        const status = document.querySelector('#save-status');
+        if (status) status.textContent = 'Изменения сохранены';
+    } catch (error) {
+        console.error('Не удалось сохранить список гаджетов:', error);
+    }
+}
+
+function createGadgetCard(gadget, index) {
+    const article = document.createElement('article');
+    article.classList.add('gadget-card');
+
+    const header = document.createElement('div');
+    header.classList.add('gadget-card-header');
+
+    const title = document.createElement('h3');
+    title.textContent = gadget.name;
+
+    const number = document.createElement('span');
+    number.classList.add('gadget-index');
+    number.textContent = `#${String(index + 1).padStart(2, '0')}`;
+
+    header.appendChild(title);
+    header.appendChild(number);
+    article.appendChild(header);
+
+    const list = document.createElement('ul');
+    list.classList.add('gadget-specs');
+
+    gadget.specs.forEach(specification => {
+        const item = document.createElement('li');
+        item.textContent = specification;
+        list.appendChild(item);
+    });
+
+    article.appendChild(list);
+
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.classList.add('button', 'delete-gadget');
+    deleteButton.textContent = 'Удалить';
+    deleteButton.addEventListener('click', () => {
+        gadgets.splice(index, 1);
+        saveGadgets();
+        renderGadgets();
+    });
+
+    article.appendChild(deleteButton);
+    return article;
+}
+
+function renderGadgets() {
+    const container = document.querySelector('#gadget-list');
+    const countElement = getElementByIdChecked('gadget-count');
+    const emptyMessage = getElementByIdChecked('empty-message');
+
+    if (!container || !countElement || !emptyMessage) {
+        console.error('Не удалось отобразить каталог: необходимые элементы отсутствуют.');
+        return;
     }
 
-    return maximum;
+    container.replaceChildren();
+
+    gadgets.forEach((gadget, index) => {
+        container.appendChild(createGadgetCard(gadget, index));
+    });
+
+    countElement.textContent = `${gadgets.length} устройств`;
+    emptyMessage.hidden = gadgets.length !== 0;
 }
 
-function filterLongLivers(devices) {
-    return devices.filter(device => device.hours > 8);
-}
+function addGadget() {
+    const name = prompt('Введите название гаджета:');
 
-function calculateSum(numbers) {
-    let sum = 0;
-
-    for (const number of numbers) {
-        sum += number;
+    if (name === null) return;
+    if (!name.trim()) {
+        alert('Название гаджета не может быть пустым.');
+        return;
     }
 
-    return sum;
-}
+    const specifications = prompt('Введите характеристики через запятую:');
 
-function countLowBattery(devices) {
-    let count = 0;
-    const lowBatteryDevices = [];
+    if (specifications === null) return;
 
-    for (let i = 0; i < devices.length; i++) {
-        if (devices[i].hours <= 4) {
-            count++;
-            lowBatteryDevices.push(devices[i]);
-        }
+    const specs = specifications
+        .split(',')
+        .map(item => item.trim())
+        .filter(item => item.length > 0);
+
+    if (specs.length === 0) {
+        alert('Добавьте хотя бы одну характеристику.');
+        return;
     }
 
-    const share = devices.length === 0
-        ? 0
-        : (count / devices.length) * 100;
-
-    return {
-        count,
-        share,
-        devices: lowBatteryDevices
-    };
+    gadgets.push({ name: name.trim(), specs });
+    saveGadgets();
+    renderGadgets();
 }
 
-const totalHours = calculateSum(batteryHours);
-const averageHours = totalHours / batteryHours.length;
-const longLivers = filterLongLivers(gadgets);
-const maximumHours = findMaximum(batteryHours);
-const lowBatteryResult = countLowBattery(gadgets);
+function removeLastGadget() {
+    const cards = document.querySelectorAll('#gadget-list .gadget-card');
 
-const averageText = Number.isInteger(averageHours)
-    ? String(averageHours)
-    : averageHours.toFixed(1).replace('.', ',');
+    if (cards.length === 0) {
+        alert('Список гаджетов пуст.');
+        console.log('Нет гаджетов для удаления.');
+        return;
+    }
 
-alert(
-    `Среднее время работы – ${averageText} часов, ` +
-    `${longLivers.length} устройств – долгожители.`
-);
-
-console.log('Время автономной работы:', batteryHours);
-console.log('Максимальное время работы:', maximumHours, 'ч.');
-console.log('Сумма часов:', totalHours, 'ч.');
-console.log(
-    'Устройства-долгожители (> 8 часов):',
-    longLivers.map(device => `${device.name} — ${device.hours} ч.`)
-);
-
-console.log(
-    'Устройств с малым временем работы (≤ 4 часов):',
-    lowBatteryResult.count
-);
-console.log(
-    'Доля устройств с малым временем работы:',
-    `${lowBatteryResult.share.toFixed(1).replace('.', ',')}%`
-);
-console.log(
-    'Эти устройства:',
-    lowBatteryResult.devices.map(device => `${device.name} — ${device.hours} ч.`)
-);
-
-if (averageHours < 6) {
-    console.log('Стоит обратить внимание на энергоэффективность');
-} else {
-    console.log('Среднее время работы не ниже 6 часов.');
+    gadgets.pop();
+    saveGadgets();
+    renderGadgets();
 }
+
+function toggleTheme() {
+    const body = document.body;
+    const themeButton = getElementByIdChecked('toggle-theme');
+
+    if (!body || !themeButton) {
+        console.error('Не удалось переключить тему: элемент не найден.');
+        return;
+    }
+
+    const isLight = body.classList.toggle('theme-light');
+    body.classList.toggle('theme-dark', !isLight);
+    themeButton.textContent = isLight ? 'Тёмная тема' : 'Светлая тема';
+
+    try {
+        localStorage.setItem(STORAGE_KEYS.theme, isLight ? 'light' : 'dark');
+    } catch (error) {
+        console.error('Не удалось сохранить тему:', error);
+    }
+}
+
+function toggleListVisibility() {
+    const container = document.querySelector('#gadget-list');
+    const emptyMessage = getElementByIdChecked('empty-message');
+    const button = getElementByIdChecked('toggle-list');
+
+    if (!container || !emptyMessage || !button) {
+        console.error('Не удалось изменить видимость списка: элемент не найден.');
+        return;
+    }
+
+    const isHidden = !container.hidden;
+    container.hidden = isHidden;
+    emptyMessage.hidden = isHidden || gadgets.length !== 0;
+    button.textContent = isHidden ? 'Показать список' : 'Скрыть список';
+
+    try {
+        localStorage.setItem(STORAGE_KEYS.hidden, String(isHidden));
+    } catch (error) {
+        console.error('Не удалось сохранить состояние списка:', error);
+    }
+}
+
+function restorePreferences() {
+    const body = document.body;
+    const themeButton = getElementByIdChecked('toggle-theme');
+    const list = document.querySelector('#gadget-list');
+    const listButton = getElementByIdChecked('toggle-list');
+
+    if (!body || !themeButton || !list || !listButton) {
+        console.error('Не удалось восстановить настройки страницы.');
+        return;
+    }
+
+    let savedTheme = 'dark';
+    let savedHidden = false;
+
+    try {
+        savedTheme = localStorage.getItem(STORAGE_KEYS.theme) || 'dark';
+        savedHidden = localStorage.getItem(STORAGE_KEYS.hidden) === 'true';
+    } catch (error) {
+        console.error('Не удалось прочитать настройки страницы:', error);
+    }
+
+    body.classList.toggle('theme-light', savedTheme === 'light');
+    body.classList.toggle('theme-dark', savedTheme !== 'light');
+    themeButton.textContent = savedTheme === 'light' ? 'Тёмная тема' : 'Светлая тема';
+
+    list.hidden = savedHidden;
+    listButton.textContent = savedHidden ? 'Показать список' : 'Скрыть список';
+}
+
+function initializePage() {
+    const addButton = getElementByIdChecked('add-gadget');
+    const removeButton = getElementByIdChecked('remove-last');
+    const themeButton = getElementByIdChecked('toggle-theme');
+    const visibilityButton = getElementByIdChecked('toggle-list');
+
+    if (!addButton || !removeButton || !themeButton || !visibilityButton) {
+        console.error('Инициализация остановлена: отсутствуют элементы управления.');
+        return;
+    }
+
+    addButton.addEventListener('click', addGadget);
+    removeButton.addEventListener('click', removeLastGadget);
+    themeButton.addEventListener('click', toggleTheme);
+    visibilityButton.addEventListener('click', toggleListVisibility);
+
+    renderGadgets();
+    restorePreferences();
+}
+
+initializePage();
