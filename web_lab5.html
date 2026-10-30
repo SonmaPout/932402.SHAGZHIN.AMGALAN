@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Интерактивный каталог гаджетов с возможностью управления карточками и темой оформления.">
+    <title>Лабораторная работа №5 — Каталог гаджетов</title>
+    <link rel="stylesheet" href="style_lab5.css">
+    <script src="script.js" defer></script>
+</head>
+<body class="theme-dark">
+<div class="page">
+    <header class="site-header">
+        <p class="eyebrow">Лабораторная работа №5 · DOM</p>
+        <h1>Техногик и обзорщик гаджетов</h1>
+        <p>Интерактивный каталог устройств и их характеристик</p>
+    </header>
+
+    <nav class="main-nav" aria-label="Основная навигация">
+        <a href="#about">О проекте</a>
+        <a href="#gadgets">Каталог гаджетов</a>
+        <a href="#controls">Управление</a>
+    </nav>
+
+    <main>
+        <section id="about" class="intro-section">
+            <div>
+                <h2>Мир технологий</h2>
+                <p>Здесь собраны устройства, которые интересны любителям технологий. Добавляйте гаджеты, просматривайте их характеристики и настраивайте страницу под себя.</p>
+            </div>
+            <div class="intro-mark" aria-hidden="true">⌘</div>
+        </section>
+
+        <section id="controls" class="section-block">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Панель управления</p>
+                    <h2>Настройки каталога</h2>
+                </div>
+                <span class="status" id="save-status" aria-live="polite">Изменения сохраняются автоматически</span>
+            </div>
+            <div class="toolbar">
+                <button type="button" id="add-gadget" class="button button-primary">Добавить гаджет</button>
+                <button type="button" id="remove-last" class="button">Удалить последний</button>
+                <button type="button" id="toggle-list" class="button">Скрыть список</button>
+                <button type="button" id="toggle-theme" class="button">Светлая тема</button>
+            </div>
+        </section>
+
+        <section id="gadgets" class="section-block">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">Ваша коллекция</p>
+                    <h2>Каталог гаджетов</h2>
+                </div>
+                <span class="counter" id="gadget-count">0 устройств</span>
+            </div>
+            <div id="gadget-list" class="gadget-grid" aria-live="polite"></div>
+            <p id="empty-message" class="empty-message" hidden>Список пока пуст. Добавьте первый гаджет.</p>
+        </section>
+    </main>
+
+    <footer>
+        <span>Шагжин Амгалан · Группа 932402</span>
+        <span>2026</span>
+    </footer>
+</div>
+</body>
+</html>
