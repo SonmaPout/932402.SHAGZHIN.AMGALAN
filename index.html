@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Учебный проект Шагжина Амгалана по веб-разработке. Лабораторные работы по HTML, CSS и JavaScript.">
+    <title>Учебный проект — Шагжин Амгалан</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #0b0f14;
+            --surface: #151d26;
+            --surface-hover: #1d2935;
+            --text: #edf2f7;
+            --muted: #aab7c4;
+            --border: #344352;
+            --accent: #a8c8e2;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 32px 18px;
+            color: var(--text);
+            background: radial-gradient(circle at top, #243342, var(--bg) 58%);
+            font: 16px/1.6 "Segoe UI", system-ui, sans-serif;
+        }
+        .container {
+            width: min(900px, 100%);
+            margin: 0 auto;
+        }
+        header {
+            padding: 30px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+        .eyebrow {
+            margin: 0 0 8px;
+            color: var(--accent);
+            font-size: .8rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+        h1 { margin: 0; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.15; }
+        header p:last-child { max-width: 680px; margin: 14px 0 0; color: var(--muted); }
+        main {
+            margin-top: 22px;
+            padding: 26px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+        h2 { margin: 0 0 8px; font-size: 1.5rem; }
+        .intro { margin: 0 0 20px; color: var(--muted); }
+        .labs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .lab {
+            display: block;
+            padding: 17px;
+            color: var(--text);
+            text-decoration: none;
+            background: #101720;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: background .2s ease, border-color .2s ease, transform .2s ease;
+        }
+        .lab:hover { background: var(--surface-hover); border-color: var(--accent); transform: translateY(-2px); }
+        .lab strong { display: block; margin-bottom: 4px; color: var(--accent); }
+        .lab span { color: var(--muted); font-size: .92rem; }
+        footer {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 18px;
+            padding: 0 4px;
+            color: var(--muted);
+            font-size: .9rem;
+        }
+        @media (max-width: 620px) {
+            body { padding: 14px 8px; }
+            header, main { padding: 20px; }
+            .labs { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <p class="eyebrow">Учебный проект · группа 932402</p>
+        <h1>Шагжин Амгалан</h1>
+        <p>Портфолио лабораторных работ по веб-разработке. Каждая работа находится в отдельной ветке GitHub, чтобы история и файлы заданий оставались независимыми.</p>
+    </header>
+
+    <main>
+        <h2>Лабораторные работы</h2>
+        <p class="intro">Выберите работу, чтобы открыть её ветку с исходным кодом и материалами.</p>
+        <div class="labs">
+            <a class="lab" href="https://github.com/SonmaPout/932402.SHAGZHIN.AMGALAN/tree/LAB1">
+                <strong>Лабораторная №1</strong>
+                <span>Основы HTML и структура веб-страницы</span>
+            </a>
+            <a class="lab" href="https://github.com/SonmaPout/932402.SHAGZHIN.AMGALAN/tree/LAB2">
+                <strong>Лабораторная №2</strong>
+                <span>CSS: оформление, селекторы и позиционирование</span>
+            </a>
+            <a class="lab" href="https://github.com/SonmaPout/932402.SHAGZHIN.AMGALAN/tree/LAB3">
+                <strong>Лабораторная №3</strong>
+                <span>Flexbox, CSS Grid и адаптивная вёрстка</span>
+            </a>
+            <a class="lab" href="https://github.com/SonmaPout/932402.SHAGZHIN.AMGALAN/tree/LAB4">
+                <strong>Лабораторная №4</strong>
+                <span>JavaScript: массивы, функции, циклы и условия</span>
+            </a>
+            <a class="lab" href="https://github.com/SonmaPout/932402.SHAGZHIN.AMGALAN/tree/LAB5">
+                <strong>Лабораторная №5</strong>
+                <span>DOM: создание элементов и управление страницей</span>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <span>Шагжин Амгалан · 932402</span>
+        <span><a href="https://github.com/SonmaPout/932402.SHAGZHIN.AMGALAN" style="color:inherit">GitHub-репозиторий</a></span>
+    </footer>
+</div>
+</body>
+</html>
