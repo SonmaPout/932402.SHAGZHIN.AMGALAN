@@ -50,10 +50,33 @@ function calculateSum(numbers) {
     return sum;
 }
 
+function countLowBattery(devices) {
+    let count = 0;
+    const lowBatteryDevices = [];
+
+    for (let i = 0; i < devices.length; i++) {
+        if (devices[i].hours <= 4) {
+            count++;
+            lowBatteryDevices.push(devices[i]);
+        }
+    }
+
+    const share = devices.length === 0
+        ? 0
+        : (count / devices.length) * 100;
+
+    return {
+        count,
+        share,
+        devices: lowBatteryDevices
+    };
+}
+
 const totalHours = calculateSum(batteryHours);
 const averageHours = totalHours / batteryHours.length;
 const longLivers = filterLongLivers(gadgets);
 const maximumHours = findMaximum(batteryHours);
+const lowBatteryResult = countLowBattery(gadgets);
 
 const averageText = Number.isInteger(averageHours)
     ? String(averageHours)
@@ -72,29 +95,17 @@ console.log(
     longLivers.map(device => `${device.name} — ${device.hours} ч.`)
 );
 
-const lowBatteryDevices = [];
-
-for (let i = 0; i < gadgets.length; i++) {
-    if (gadgets[i].hours <= 4) {
-        lowBatteryDevices.push(gadgets[i]);
-    }
-}
-
-const lowBatteryCount = lowBatteryDevices.length;
-const lowBatteryShare =
-    (lowBatteryCount / gadgets.length) * 100;
-
 console.log(
     'Устройств с малым временем работы (≤ 4 часов):',
-    lowBatteryCount
+    lowBatteryResult.count
 );
 console.log(
     'Доля устройств с малым временем работы:',
-    `${lowBatteryShare.toFixed(1).replace('.', ',')}%`
+    `${lowBatteryResult.share.toFixed(1).replace('.', ',')}%`
 );
 console.log(
     'Эти устройства:',
-    lowBatteryDevices.map(device => `${device.name} — ${device.hours} ч.`)
+    lowBatteryResult.devices.map(device => `${device.name} — ${device.hours} ч.`)
 );
 
 if (averageHours < 6) {
