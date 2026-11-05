@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101820"><meta name="description" content="Учебное PWA-приложение с фиктивными курсами валют за неделю.">
+<title>Курсы валют за неделю — LAB6</title>
+<link rel="manifest" href="/manifest.json"><link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script>
+</head>
+<body><div class="page-shell">
+<header class="topbar"><a class="brand" href="/"><span class="brand-mark">₿</span><span>WEEKLY<span class="brand-light"> RATES</span></span></a>
+<nav aria-label="Основная навигация"><a class="active" href="/">Главная</a><a href="/about">О проекте</a></nav></header>
+<main>
+<section class="hero"><div class="hero-copy"><p class="eyebrow">Лабораторная работа №6 · Вариант 12</p>
+<h1>Курсы валют<br><span>за неделю</span></h1><p class="hero-description">Обзор учебных курсов USD, EUR и CNY за семь условных дней.</p>
+<p class="mock-note"><span class="dot"></span> Демонстрационные данные · не реальные котировки</p></div>
+<div class="hero-art" aria-hidden="true"><div class="coin coin-main">₽</div><div class="coin coin-small">$</div><div class="coin coin-side">€</div><div class="orbit"></div></div></section>
+<section class="section-heading"><div><p class="eyebrow">Обзор рынка</p><h2>Выберите валюту</h2></div><span class="period">Последние 7 дней</span></section>
+<section class="currency-grid" id="currency-grid" aria-live="polite"><article class="currency-card"><p>Загрузка данных...</p></article></section>
+<section class="api-panel"><div><p class="eyebrow">Проверить API</p><h2>Получить данные по коду валюты</h2><p>Сервер возвращает JSON с семью значениями курса и средним.</p></div>
+<form id="currency-form"><label for="currency-input">Код валюты</label><div class="form-row"><input id="currency-input" name="currency" value="USD" maxlength="3" autocomplete="off" required><button type="submit">Запросить</button></div>
+<pre id="api-result" aria-live="polite">Например: USD, EUR или CNY</pre></form></section>
+</main><footer><span>Шагжин Амгалан · Группа 932402</span><span>Node.js + Express · PWA</span></footer>
+</div></body></html>
