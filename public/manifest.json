@@ -1,0 +1,8 @@
+{
+  "name":"Weekly Rates — Курсы валют за неделю",
+  "short_name":"Weekly Rates",
+  "description":"Учебное приложение с курсами USD, EUR и CNY за неделю.",
+  "lang":"ru","start_url":"/","scope":"/","display":"standalone",
+  "background_color":"#0b1117","theme_color":"#101820",
+  "icons":[{"src":"/icons/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
