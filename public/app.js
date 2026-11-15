@@ -1,33 +1,17 @@
 'use strict';
-const currencyInfo={USD:{name:'Доллар США',symbol:'$'},EUR:{name:'Евро',symbol:'€'},CNY:{name:'Китайский юань',symbol:'¥'}};
-async function requestRates(currency){
-  const response=await fetch(`/api/rates/${encodeURIComponent(currency)}`);
-  if(!response.ok){const data=await response.json();throw new Error(data.error||'Не удалось получить данные')}
-  return response.json();
-}
-function createCurrencyCard(data){
-  const info=currencyInfo[data.currency],card=document.createElement('article');card.className='currency-card';
-  const top=document.createElement('div');top.className='currency-top';
-  const titleBlock=document.createElement('div'),title=document.createElement('h3');title.className='currency-code';title.textContent=data.currency;
-  const name=document.createElement('p');name.className='currency-name';name.textContent=info.name;titleBlock.append(title,name);
-  const symbol=document.createElement('span');symbol.className='currency-symbol';symbol.textContent=info.symbol;top.append(titleBlock,symbol);
-  const average=document.createElement('p');average.className='average';average.textContent=data.avg.toLocaleString('ru-RU');
-  const small=document.createElement('small');small.textContent=' среднее за неделю';average.appendChild(small);
-  const bars=document.createElement('div');bars.className='rate-bars';const min=Math.min(...data.rates),max=Math.max(...data.rates);
-  data.rates.forEach((rate,index)=>{const bar=document.createElement('div');bar.className='rate-bar';bar.style.height=`${max===min?100:28+((rate-min)/(max-min))*72}%`;bar.title=`День ${index+1}: ${rate}`;bars.appendChild(bar)});
-  const days=document.createElement('div');days.className='days';for(let day=1;day<=7;day++){const label=document.createElement('span');label.textContent=day;days.appendChild(label)}
-  card.append(top,average,bars,days);return card;
-}
-async function loadCurrencyCards(){
-  const grid=document.querySelector('#currency-grid');if(!grid)return;grid.replaceChildren();
-  for(const currency of Object.keys(currencyInfo)){try{grid.appendChild(createCurrencyCard(await requestRates(currency)))}catch(error){const p=document.createElement('p');p.textContent=`${currency}: ${error.message}`;grid.appendChild(p)}}
-}
-function setupApiForm(){
-  const form=document.querySelector('#currency-form'),input=document.querySelector('#currency-input'),output=document.querySelector('#api-result');if(!form||!input||!output)return;
-  form.addEventListener('submit',async event=>{event.preventDefault();const currency=input.value.trim().toUpperCase();if(!currency){output.textContent='Введите код валюты.';return}
-    output.textContent='Загрузка...';try{output.textContent=JSON.stringify(await requestRates(currency),null,2)}catch(error){output.textContent=JSON.stringify({error:error.message},null,2)}});
-}
-async function registerServiceWorker(){
-  if('serviceWorker'in navigator){try{await navigator.serviceWorker.register('/service-worker.js');console.log('Service Worker зарегистрирован.')}catch(error){console.error('Ошибка регистрации Service Worker:',error)}}
-}
-document.addEventListener('DOMContentLoaded',()=>{loadCurrencyCards();setupApiForm();registerServiceWorker()});
+const dayNames=['','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'];
+const shortDays=['','ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'];
+let activeDay=1,lessons=[];
+const list=document.querySelector('#lesson-list'),tabs=document.querySelector('#day-tabs'),dialog=document.querySelector('#lesson-dialog'),form=document.querySelector('#lesson-form');
+async function api(url,options={}){const response=await fetch(url,{headers:{'Content-Type':'application/json'},...options});const data=await response.json();if(!response.ok)throw new Error(data.error||'Ошибка сервера');return data}
+function showNotice(text,error=false){const el=document.querySelector('#notice');el.textContent=text;el.style.color=error?'#ffaaa0':'#8ed8c4'}
+function renderTabs(){tabs.replaceChildren();for(let day=1;day<=7;day++){const button=document.createElement('button');button.className='day-tab'+(day===activeDay?' active':'');button.type='button';button.setAttribute('aria-pressed',String(day===activeDay));const name=document.createElement('span');name.textContent=shortDays[day];const number=document.createElement('strong');number.textContent=String(day).padStart(2,'0');button.append(name,number);button.addEventListener('click',()=>{activeDay=day;renderTabs();loadSchedule()});tabs.append(button)}}
+function renderLesson(item){const article=document.createElement('article');article.className='lesson';const time=document.createElement('div');time.className='time';time.textContent=item.start_time;const end=document.createElement('small');end.textContent='до '+item.end_time;time.append(end);const info=document.createElement('div');const title=document.createElement('h3');title.textContent=item.subject;const teacher=document.createElement('p');teacher.textContent=item.teacher+' · '+item.room;info.append(title,teacher);const actions=document.createElement('div');actions.className='lesson-actions';const edit=document.createElement('button');edit.type='button';edit.textContent='Изменить';edit.addEventListener('click',()=>openEditor(item));const del=document.createElement('button');del.type='button';del.className='delete';del.textContent='Удалить';del.addEventListener('click',async()=>{if(!confirm('Удалить занятие из расписания?'))return;try{await api('/api/schedule/'+item.id,{method:'DELETE'});showNotice('Занятие удалено');loadSchedule()}catch(e){showNotice(e.message,true)}});actions.append(edit,del);article.append(time,info,actions);return article}
+async function loadSchedule(){list.replaceChildren();try{lessons=await api('/api/schedule?day='+activeDay);if(!lessons.length){const empty=document.createElement('div');empty.className='empty';empty.textContent='На этот день занятий пока нет. Добавь первую пару!';list.append(empty)}else lessons.forEach(item=>list.append(renderLesson(item)));document.querySelector('#week-count').textContent=lessons.length+' занятий в выбранный день';const minutes=lessons.reduce((sum,item)=>sum+toMinutes(item.end_time)-toMinutes(item.start_time),0);document.querySelector('#total-hours').innerHTML=String((minutes/60).toFixed(1))+'<span> ч</span>'}catch(e){showNotice(e.message,true)}}
+function toMinutes(time){const [h,m]=time.split(':').map(Number);return h*60+m}
+function openEditor(item=null){form.reset();document.querySelector('#form-error').textContent='';document.querySelector('#lesson-id').value=item?item.id:'';document.querySelector('#dialog-title').textContent=item?'Редактировать занятие':'Новое занятие';document.querySelector('#subject').value=item?.subject||'';document.querySelector('#teacher').value=item?.teacher||'';document.querySelector('#room').value=item?.room||'';document.querySelector('#day').value=String(item?.day||activeDay);document.querySelector('#start-time').value=item?.start_time||'09:30';document.querySelector('#end-time').value=item?.end_time||'11:00';dialog.showModal()}
+document.querySelector('#add-lesson').addEventListener('click',()=>openEditor());
+document.querySelector('#close-dialog').addEventListener('click',()=>dialog.close());
+dialog.addEventListener('click',event=>{if(event.target===dialog)dialog.close()});
+form.addEventListener('submit',async event=>{event.preventDefault();const id=document.querySelector('#lesson-id').value;const payload={subject:document.querySelector('#subject').value,teacher:document.querySelector('#teacher').value,room:document.querySelector('#room').value,day:Number(document.querySelector('#day').value),start_time:document.querySelector('#start-time').value,end_time:document.querySelector('#end-time').value};if(payload.start_time>=payload.end_time){document.querySelector('#form-error').textContent='Время начала должно быть раньше времени окончания.';return}try{await api(id?'/api/schedule/'+id:'/api/schedule',{method:id?'PUT':'POST',body:JSON.stringify(payload)});activeDay=payload.day;renderTabs();dialog.close();showNotice(id?'Изменения сохранены':'Занятие добавлено');loadSchedule()}catch(e){document.querySelector('#form-error').textContent=e.message}});
+renderTabs();loadSchedule();
