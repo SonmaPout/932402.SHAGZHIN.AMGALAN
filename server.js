@@ -1,34 +1,15 @@
 'use strict';
-const express = require('express');
-const path = require('path');
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Фиктивные учебные курсы за семь дней, не актуальные биржевые котировки.
-const weeklyRates = {
-  USD: [90, 91, 92, 93, 94, 95, 96],
-  EUR: [98, 99, 100, 101, 102, 103, 104],
-  CNY: [12.4, 12.5, 12.6, 12.7, 12.8, 12.9, 13.0]
-};
-
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  next();
-});
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
-app.get('/about', (req, res) => res.sendFile(path.join(__dirname, 'public', 'about.html')));
-
-// Query-параметры игнорируются согласно условию варианта 12.
-app.get('/api/rates/:currency', (req, res) => {
-  const currency = req.params.currency.toUpperCase();
-  const rates = weeklyRates[currency];
-  if (!rates) return res.status(404).json({ error: 'Currency not supported' });
-
-  const avg = Number((rates.reduce((sum, rate) => sum + rate, 0) / rates.length).toFixed(2));
-  return res.json({ currency, rates, avg });
-});
-
-app.use((req, res) => res.status(404).json({ error: 'Not found' }));
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+const express=require('express'),path=require('path');
+const {run,get,all,initDatabase}=require('./db');
+const app=express(),PORT=process.env.PORT||3000;
+app.use(express.json());
+app.use((req,res,next)=>{console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);next()});
+app.use(express.static(path.join(__dirname,'public')));
+app.get('/api/tickets',async(req,res,next)=>{try{let sql='SELECT id,event_id,type,price,remaining FROM tickets',params=[];if(req.query.event_id!==undefined){const eventId=Number(req.query.event_id);if(!Number.isInteger(eventId)||eventId<1)return res.status(400).json({error:'event_id должен быть положительным целым числом'});sql+=' WHERE event_id=?';params.push(eventId)}sql+=' ORDER BY event_id,price';res.json(await all(sql,params))}catch(e){next(e)}});
+app.post('/api/tickets',async(req,res,next)=>{try{const {event_id,type,price,remaining}=req.body;if(!Number.isInteger(event_id)||event_id<1)return res.status(400).json({error:'Некорректный event_id'});if(!['general','vip'].includes(type))return res.status(400).json({error:'type должен быть general или vip'});if(typeof price!=='number'||!Number.isFinite(price)||price<0)return res.status(400).json({error:'price должен быть неотрицательным числом'});if(!Number.isInteger(remaining)||remaining<0)return res.status(400).json({error:'remaining должен быть неотрицательным целым числом'});const result=await run('INSERT INTO tickets(event_id,type,price,remaining) VALUES(?,?,?,?)',[event_id,type,price,remaining]);res.status(201).json(await get('SELECT * FROM tickets WHERE id=?',[result.id]))}catch(e){next(e)}});
+// BEGIN IMMEDIATE + условный UPDATE делают покупку атомарной и не допускают отрицательного остатка.
+app.post('/api/tickets/:id/purchase',async(req,res,next)=>{const id=Number(req.params.id),quantity=req.body.quantity===undefined?1:req.body.quantity;if(!Number.isInteger(id)||id<1||!Number.isInteger(quantity)||quantity<1)return res.status(400).json({error:'Некорректный ID или количество'});try{await run('BEGIN IMMEDIATE');const result=await run('UPDATE tickets SET remaining=remaining-? WHERE id=? AND remaining>=?',[quantity,id,quantity]);if(!result.changes){const exists=await get('SELECT id FROM tickets WHERE id=?',[id]);await run('ROLLBACK');return res.status(exists?400:404).json({error:exists?'Недостаточно билетов':'Запись не найдена'})}const ticket=await get('SELECT * FROM tickets WHERE id=?',[id]);await run('COMMIT');res.json({message:'Покупка оформлена',ticket})}catch(e){try{await run('ROLLBACK')}catch{}next(e)}});
+app.delete('/api/tickets/:id',async(req,res,next)=>{try{const id=Number(req.params.id);if(!Number.isInteger(id)||id<1)return res.status(400).json({error:'Некорректный ID'});const r=await run('DELETE FROM tickets WHERE id=?',[id]);if(!r.changes)return res.status(404).json({error:'Запись не найдена'});res.json({message:'Запись удалена'})}catch(e){next(e)}});
+app.use((req,res)=>res.status(404).json({error:'Маршрут не найден'}));
+app.use((e,req,res,next)=>{console.error(e);res.status(500).json({error:'Внутренняя ошибка сервера'})});
+initDatabase().then(()=>app.listen(PORT,()=>console.log(`Server started on port ${PORT}`))).catch(e=>{console.error(e);process.exit(1)});
