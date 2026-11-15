@@ -1,1 +1,1 @@
-{"name":"lab6-weekly-currency-rates","version":"1.0.0","description":"Лабораторная работа №6: Node.js, Express и PWA — курсы валют за неделю","main":"server.js","scripts":{"start":"node server.js","dev":"node --watch server.js"},"author":"Шагжин Амгалан","license":"ISC","dependencies":{"express":"^4.21.2"}}
+{"name":"lab8-class-schedule","version":"1.0.0","description":"Лабораторная №8 — итоговый проект: расписание занятий","main":"server.js","scripts":{"start":"node server.js","dev":"node --watch server.js"},"dependencies":{"express":"^4.21.2","sqlite3":"^5.1.7"}}
