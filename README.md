@@ -1,72 +1,65 @@
-# Лабораторная работа №6 — Node.js, Express и PWA
+# Лабораторная работа №8 — итоговый мини-проект
 
-## Проект «Курсы валют за неделю»
+**Вариант 12. Расписание занятий**  
+Автор: Шагжин Амгалан · Группа 932402
 
-**Вариант:** 12  
-**Автор:** Шагжин Амгалан  
-**Группа:** 932402
+## Описание
+Адаптивное веб-приложение для ведения учебного расписания. Реализованы CRUD занятий, просмотр по дням недели, модальное окно добавления/редактирования, цветовое выделение карточек и проверка пересечений времени.
 
-## Цель работы
-Освоить запуск Node.js-приложений, работу с модулями, создание HTTP-сервера на Express, обработку маршрутов и превращение сайта в PWA с офлайн-режимом.
+## Стек
+HTML5, CSS3 (Grid/Flexbox), JavaScript ES6+ (fetch, async/await), Node.js, Express, SQLite.
 
-## Структура проекта
-```text
-LAB6/
-├── public/
-│   ├── icons/icon.svg
-│   ├── about.html
-│   ├── app.js
-│   ├── index.html
-│   ├── manifest.json
-│   ├── service-worker.js
-│   └── styles.css
-├── .gitignore
-├── package.json
-├── README.md
-└── server.js
+## Структура
+- `server.js` — Express API, проверка входных данных и конфликтов.
+- `db.js` — SQLite и инициализация таблицы.
+- `schedule.db` — создаётся автоматически.
+- `public/index.html` — интерфейс и доступное модальное окно.
+- `public/styles.css` — адаптивные стили.
+- `public/app.js` — вкладки дней, CRUD через fetch и отображение расписания.
+
+## Схема БД
+```sql
+CREATE TABLE schedule (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  subject TEXT NOT NULL,
+  teacher TEXT NOT NULL,
+  room TEXT NOT NULL,
+  day INTEGER NOT NULL CHECK(day BETWEEN 1 AND 7),
+  start_time TEXT NOT NULL,
+  end_time TEXT NOT NULL,
+  CHECK(start_time < end_time)
+);
 ```
+Дни недели: 1 — понедельник, ..., 7 — воскресенье. Время хранится в формате HH:MM.
 
-## Маршруты
-| Метод | Маршрут | Назначение |
+## API
+| Метод | URL | Назначение |
 |---|---|---|
-| GET | `/` | Главная страница |
-| GET | `/about` | Информация о проекте |
-| GET | `/api/rates/:currency` | Курсы валют в JSON |
+| GET | `/api/schedule` | Все занятия |
+| GET | `/api/schedule?day=1` | Занятия выбранного дня |
+| POST | `/api/schedule` | Добавить занятие |
+| PUT | `/api/schedule/:id` | Изменить занятие |
+| DELETE | `/api/schedule/:id` | Удалить занятие |
 
-## Вариант 12 — курсы валют за неделю
-- **USD:** `[90, 91, 92, 93, 94, 95, 96]`, среднее — 93.
-- **EUR:** `[98, 99, 100, 101, 102, 103, 104]`, среднее — 101.
-- **CNY:** `[12.4, 12.5, 12.6, 12.7, 12.8, 12.9, 13.0]`, среднее — 12.7.
-
-Пример `GET /api/rates/USD`:
+Пример тела POST/PUT:
 ```json
-{"currency":"USD","rates":[90,91,92,93,94,95,96],"avg":93}
+{"subject":"Веб-разработка","teacher":"Петров И.С.","room":"ауд. 305","day":1,"start_time":"11:20","end_time":"12:50"}
 ```
-Неподдерживаемая валюта возвращает статус **404** и `{"error":"Currency not supported"}`. Query-параметры игнорируются согласно заданию. Значения фиктивные и используются только для учебной демонстрации.
+
+Сервер проверяет обязательные поля, день недели, формат времени и условие `start_time < end_time`. Пересечение существует, если у занятий одного дня `newStart < existingEnd AND newEnd > existingStart`. При конфликте возвращается **409 Conflict**. Неверные данные дают 400, отсутствующая запись — 404.
 
 ## Запуск
-Требуется Node.js и npm:
 ```bash
 npm install
 npm start
+``
+Откройте http://localhost:3000. Для разработки: `npm run dev`.
+
+## Примеры запросов
+```bash
+curl http://localhost:3000/api/schedule
+curl "http://localhost:3000/api/schedule?day=1"
+curl -X POST http://localhost:3000/api/schedule -H "Content-Type: application/json" -d '{"subject":"Веб-разработка","teacher":"Петров И.С.","room":"305","day":1,"start_time":"11:20","end_time":"12:50"}'
+curl -X PUT http://localhost:3000/api/schedule/1 -H "Content-Type: application/json" -d '{"subject":"Алгоритмы","teacher":"Сидоров А.В.","room":"410","day":2,"start_time":"12:00","end_time":"13:30"}'
+curl -X DELETE http://localhost:3000/api/schedule/1
 ```
-Откройте [http://localhost:3000](http://localhost:3000). Для разработки доступна команда `npm run dev`.
-
-## PWA и офлайн-режим
-- `manifest.json` содержит название, цвета, режим отображения и иконку.
-- Манифест подключён к обеим HTML-страницам.
-- `service-worker.js` регистрируется клиентским скриптом.
-- Service Worker кеширует HTML, CSS, JavaScript, манифест и иконку.
-- После первого посещения страницы и статические ресурсы доступны без сети. API без сети возвращает JSON со статусом 503.
-- Для проверки используйте Chrome/Edge DevTools → Application. Установка PWA и Service Worker требуют localhost или HTTPS.
-
-## Соответствие заданию
-- [x] Node.js-проект инициализирован, Express указан как зависимость.
-- [x] Сервер раздаёт статику из `public`.
-- [x] Реализованы маршруты `/`, `/about`, `/api/rates/:currency`.
-- [x] Параметр маршрута `:currency` обрабатывается.
-- [x] Возвращаются семь значений курса и среднее.
-- [x] Ошибка неподдерживаемой валюты — 404.
-- [x] Манифест PWA и иконка добавлены и подключены.
-- [x] Service Worker зарегистрирован и кеширует статику.
-- [x] Предусмотрен офлайн-режим интерфейса.
