@@ -15,6 +15,8 @@
 | `LAB4` | JavaScript: массивы, функции, циклы и условия | [Открыть LAB4](https://github.com/SonmaPout/932402.SHAGZHIN.AMGALAN/tree/LAB4) |
 | `LAB5` | DOM: создание элементов и управление страницей | [Открыть LAB5](https://github.com/SonmaPout/932402.SHAGZHIN.AMGALAN/tree/LAB5) |
 | `LAB6` | Node.js, Express, HTTP API и PWA | [Открыть LAB6](https://github.com/SonmaPout/932402.SHAGZHIN.AMGALAN/tree/LAB6) |
+| `LAB7` | SQLite, CRUD и транзакции: билеты на мероприятия | [Открыть LAB7](https://github.com/SonmaPout/932402.SHAGZHIN.AMGALAN/tree/LAB7) |
+| `LAB8` | Итоговый мини-проект: расписание занятий | [Открыть LAB8](https://github.com/SonmaPout/932402.SHAGZHIN.AMGALAN/tree/LAB8) |
 
 ## Структура ветки main
 ```text
