@@ -1,72 +1,58 @@
-# Лабораторная работа №6 — Node.js, Express и PWA
+# Лабораторная работа №7 — SQLite и CRUD
 
-## Проект «Курсы валют за неделю»
+**Вариант 12. Билеты на мероприятие (остаток мест)**  
+Автор: Шагжин Амгалан · Группа 932402
 
-**Вариант:** 12  
-**Автор:** Шагжин Амгалан  
-**Группа:** 932402
+## Цель
+Создать SQLite-базу, реализовать CRUD-функции и подключить их к REST API на Express.
 
-## Цель работы
-Освоить запуск Node.js-приложений, работу с модулями, создание HTTP-сервера на Express, обработку маршрутов и превращение сайта в PWA с офлайн-режимом.
+## Структура
+- `server.js` — Express-маршруты и валидация.
+- `db.js` — подключение SQLite, Promise-обёртки и инициализация таблицы.
+- `tickets.db` — файл БД создаётся автоматически при первом запуске.
+- `public/` — клиентский интерфейс и запросы к API.
 
-## Структура проекта
-```text
-LAB6/
-├── public/
-│   ├── icons/icon.svg
-│   ├── about.html
-│   ├── app.js
-│   ├── index.html
-│   ├── manifest.json
-│   ├── service-worker.js
-│   └── styles.css
-├── .gitignore
-├── package.json
-├── README.md
-└── server.js
+## Схема БД
+```sql
+CREATE TABLE tickets (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  event_id INTEGER NOT NULL,
+  type TEXT NOT NULL CHECK(type IN ('general','vip')),
+  price REAL NOT NULL CHECK(price >= 0),
+  remaining INTEGER NOT NULL CHECK(remaining >= 0)
+);
 ```
 
-## Маршруты
-| Метод | Маршрут | Назначение |
+## API
+| Метод | URL | Назначение |
 |---|---|---|
-| GET | `/` | Главная страница |
-| GET | `/about` | Информация о проекте |
-| GET | `/api/rates/:currency` | Курсы валют в JSON |
+| GET | `/api/tickets` | Список, необязательный фильтр `?event_id=7` |
+| POST | `/api/tickets` | Создание категории |
+| POST | `/api/tickets/:id/purchase` | Покупка, уменьшение остатка |
+| DELETE | `/api/tickets/:id` | Удаление категории |
 
-## Вариант 12 — курсы валют за неделю
-- **USD:** `[90, 91, 92, 93, 94, 95, 96]`, среднее — 93.
-- **EUR:** `[98, 99, 100, 101, 102, 103, 104]`, среднее — 101.
-- **CNY:** `[12.4, 12.5, 12.6, 12.7, 12.8, 12.9, 13.0]`, среднее — 12.7.
-
-Пример `GET /api/rates/USD`:
+Пример создания:
 ```json
-{"currency":"USD","rates":[90,91,92,93,94,95,96],"avg":93}
+{"event_id":7,"type":"vip","price":3500,"remaining":20}
 ```
-Неподдерживаемая валюта возвращает статус **404** и `{"error":"Currency not supported"}`. Query-параметры игнорируются согласно заданию. Значения фиктивные и используются только для учебной демонстрации.
+Пример покупки:
+```json
+{"quantity":2}
+```
+
+Покупка выполняется транзакцией SQLite: `BEGIN IMMEDIATE`, условный `UPDATE ... WHERE remaining >= ?`, затем `COMMIT`. Если билетов недостаточно, транзакция откатывается (`ROLLBACK`) и сервер возвращает 400. Неизвестная запись — 404, некорректные данные — 400.
 
 ## Запуск
-Требуется Node.js и npm:
 ```bash
 npm install
 npm start
+``
+Откройте http://localhost:3000. Для разработки: `npm run dev`.
+
+## Проверка
+```bash
+curl http://localhost:3000/api/tickets
+curl "http://localhost:3000/api/tickets?event_id=7"
+curl -X POST http://localhost:3000/api/tickets/1/purchase -H "Content-Type: application/json" -d '{"quantity":2}'
 ```
-Откройте [http://localhost:3000](http://localhost:3000). Для разработки доступна команда `npm run dev`.
-
-## PWA и офлайн-режим
-- `manifest.json` содержит название, цвета, режим отображения и иконку.
-- Манифест подключён к обеим HTML-страницам.
-- `service-worker.js` регистрируется клиентским скриптом.
-- Service Worker кеширует HTML, CSS, JavaScript, манифест и иконку.
-- После первого посещения страницы и статические ресурсы доступны без сети. API без сети возвращает JSON со статусом 503.
-- Для проверки используйте Chrome/Edge DevTools → Application. Установка PWA и Service Worker требуют localhost или HTTPS.
-
-## Соответствие заданию
-- [x] Node.js-проект инициализирован, Express указан как зависимость.
-- [x] Сервер раздаёт статику из `public`.
-- [x] Реализованы маршруты `/`, `/about`, `/api/rates/:currency`.
-- [x] Параметр маршрута `:currency` обрабатывается.
-- [x] Возвращаются семь значений курса и среднее.
-- [x] Ошибка неподдерживаемой валюты — 404.
-- [x] Манифест PWA и иконка добавлены и подключены.
-- [x] Service Worker зарегистрирован и кеширует статику.
-- [x] Предусмотрен офлайн-режим интерфейса.
+При первом старте добавляются демонстрационные записи. Данные сохраняются в локальном файле SQLite.
