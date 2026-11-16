@@ -4,7 +4,6 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Фиктивные учебные курсы за семь дней, не актуальные биржевые котировки.
 const weeklyRates = {
   USD: [90, 91, 92, 93, 94, 95, 96],
   EUR: [98, 99, 100, 101, 102, 103, 104],
@@ -20,7 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.get('/about', (req, res) => res.sendFile(path.join(__dirname, 'public', 'about.html')));
 
-// Query-параметры игнорируются согласно условию варианта 12.
+
 app.get('/api/rates/:currency', (req, res) => {
   const currency = req.params.currency.toUpperCase();
   const rates = weeklyRates[currency];
