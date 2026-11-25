@@ -22,7 +22,7 @@ function validateLesson(body) {
     if (typeof teacher !== 'string' || !teacher.trim()) return 'Укажите преподавателя';
     if (typeof room !== 'string' || !room.trim()) return 'Укажите аудиторию';
     if (!Number.isInteger(day) || !DAYS.includes(day)) return 'День должен быть числом от 1 до 7';
-    const timePattern = /^(?:[01]\\d|2[0-3]):[0-5]\\d$/;
+    const timePattern = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
     if (!timePattern.test(start_time) || !timePattern.test(end_time)) return 'Время должно быть в формате ЧЧ:ММ';
     if (start_time >= end_time) return 'Время начала должно быть раньше времени окончания';
     return null;
