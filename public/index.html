@@ -1,5 +1,104 @@
-<!doctype html><html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111827"><meta name="description" content="Учебное расписание занятий с CRUD и проверкой пересечений."><title>Classplan — расписание занятий</title><link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script></head><body><div class="app"><header><a class="brand" href="/">class<span>plan</span><i>✳</i></a><span class="header-note">STUDENT WORKSPACE · 2026</span></header><main><section class="intro"><div><p class="eyebrow">ТВОЯ НЕДЕЛЯ ПОД КОНТРОЛЕМ</p><h1>Учись в своём<br><span>ритме.</span></h1><p class="intro-text">Расписание занятий в одном месте. Выбирай день, добавляй пары и планируй учебную неделю.</p></div><div class="week-art" aria-hidden="true"><span>MON</span><strong>07</strong><small>days / week</small></div></section>
-<section class="schedule-head"><div><p class="eyebrow">РАСПИСАНИЕ</p><h2>Моя учебная неделя</h2></div><button class="add-button" id="add-lesson">＋ Добавить занятие</button></section>
-<nav id="day-tabs" class="day-tabs" aria-label="Выбор дня недели"></nav><div id="notice" role="status" aria-live="polite"></div><section id="lesson-list" class="lesson-list" aria-live="polite"><p>Загрузка расписания...</p></section>
-<section class="week-summary"><div><p class="eyebrow">НЕДЕЛЯ</p><h2 id="week-count">0 занятий</h2><p>Все занятия хранятся в локальной базе SQLite.</p></div><div class="summary-number" id="total-hours">0<span> ч</span></div></section></main><footer>Итоговый мини-проект · HTML · CSS · JavaScript · Express · SQLite</footer></div>
-<dialog id="lesson-dialog"><form id="lesson-form"><div class="dialog-head"><div><p class="eyebrow">УПРАВЛЕНИЕ РАСПИСАНИЕМ</p><h2 id="dialog-title">Новое занятие</h2></div><button type="button" class="close" id="close-dialog" aria-label="Закрыть">×</button></div><input type="hidden" id="lesson-id"><label for="subject">Предмет</label><input id="subject" maxlength="100" placeholder="Например, Веб-разработка" required><label for="teacher">Преподаватель</label><input id="teacher" maxlength="100" placeholder="Фамилия И.О." required><label for="room">Аудитория</label><input id="room" maxlength="40" placeholder="ауд. 305" required><label for="day">День недели</label><select id="day" required><option value="1">Понедельник</option><option value="2">Вторник</option><option value="3">Среда</option><option value="4">Четверг</option><option value="5">Пятница</option><option value="6">Суббота</option><option value="7">Воскресенье</option></select><div class="time-row"><div><label for="start-time">Начало</label><input id="start-time" type="time" required></div><div><label for="end-time">Окончание</label><input id="end-time" type="time" required></div></div><p id="form-error" class="form-error" role="alert"></p><button class="save-button" type="submit">Сохранить занятие</button></form></dialog></body></html>
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827">
+<meta name="description" content="Учебное расписание занятий с CRUD и проверкой пересечений.">
+<title>Classplan — расписание занятий</title>
+<link rel="stylesheet" href="/styles.css">
+<script src="/app.js" defer>
+</script>
+</head>
+<body>
+<div class="app">
+<header>
+<a class="brand" href="/">class<span>plan</span>
+<i>✳</i>
+</a>
+<span class="header-note">STUDENT WORKSPACE · 2026</span>
+</header>
+<main>
+<section class="intro">
+<div>
+<p class="eyebrow">ТВОЯ НЕДЕЛЯ ПОД КОНТРОЛЕМ</p>
+<h1>Учись в своём<br>
+<span>ритме.</span>
+</h1>
+<p class="intro-text">Расписание занятий в одном месте. Выбирай день, добавляй пары и планируй учебную неделю.</p>
+</div>
+<div class="week-art" aria-hidden="true">
+<span>MON</span>
+<strong>07</strong>
+<small>days / week</small>
+</div>
+</section>
+<section class="schedule-head">
+<div>
+<p class="eyebrow">РАСПИСАНИЕ</p>
+<h2>Моя учебная неделя</h2>
+</div>
+<button class="add-button" id="add-lesson">＋ Добавить занятие</button>
+</section>
+<nav id="day-tabs" class="day-tabs" aria-label="Выбор дня недели">
+</nav>
+<div id="notice" role="status" aria-live="polite">
+</div>
+<section id="lesson-list" class="lesson-list" aria-live="polite">
+<p>Загрузка расписания...</p>
+</section>
+<section class="week-summary">
+<div>
+<p class="eyebrow">НЕДЕЛЯ</p>
+<h2 id="week-count">0 занятий</h2>
+<p>Все занятия хранятся в локальной базе SQLite.</p>
+</div>
+<div class="summary-number" id="total-hours">0<span> ч</span>
+</div>
+</section>
+</main>
+<footer>Итоговый мини-проект · HTML · CSS · JavaScript · Express · SQLite</footer>
+</div>
+<dialog id="lesson-dialog">
+<form id="lesson-form">
+<div class="dialog-head">
+<div>
+<p class="eyebrow">УПРАВЛЕНИЕ РАСПИСАНИЕМ</p>
+<h2 id="dialog-title">Новое занятие</h2>
+</div>
+<button type="button" class="close" id="close-dialog" aria-label="Закрыть">×</button>
+</div>
+<input type="hidden" id="lesson-id">
+<label for="subject">Предмет</label>
+<input id="subject" maxlength="100" placeholder="Например, Веб-разработка" required>
+<label for="teacher">Преподаватель</label>
+<input id="teacher" maxlength="100" placeholder="Фамилия И.О." required>
+<label for="room">Аудитория</label>
+<input id="room" maxlength="40" placeholder="ауд. 305" required>
+<label for="day">День недели</label>
+<select id="day" required>
+<option value="1">Понедельник</option>
+<option value="2">Вторник</option>
+<option value="3">Среда</option>
+<option value="4">Четверг</option>
+<option value="5">Пятница</option>
+<option value="6">Суббота</option>
+<option value="7">Воскресенье</option>
+</select>
+<div class="time-row">
+<div>
+<label for="start-time">Начало</label>
+<input id="start-time" type="time" required>
+</div>
+<div>
+<label for="end-time">Окончание</label>
+<input id="end-time" type="time" required>
+</div>
+</div>
+<p id="form-error" class="form-error" role="alert">
+</p>
+<button class="save-button" type="submit">Сохранить занятие</button>
+</form>
+</dialog>
+</body>
+</html>
