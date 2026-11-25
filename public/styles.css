@@ -1,1 +1,213 @@
-:root{font-family:Inter,"Segoe UI",sans-serif;color:#f3f5f2;background:#101817;font-synthesis:none}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% 0,#293b32,#101817 50%);min-height:100vh}.shell{width:min(1100px,calc(100% - 36px));margin:auto}header{height:76px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #35443d}.brand{font-weight:900;letter-spacing:.15em;text-decoration:none;color:#f3f5f2}.brand span,.hero h1 span{color:#d0ef9b}.tag,.eyebrow{color:#a4b5a5;font-size:.75rem;letter-spacing:.13em}.hero{display:flex;justify-content:space-between;align-items:center;padding:62px 4%;border-bottom:1px solid #35443d}.hero h1{font-size:clamp(2.8rem,7vw,5.2rem);line-height:1.02;letter-spacing:-.06em;margin:12px 0}.hero p:not(.eyebrow){max-width:470px;color:#a9b6ae}.hero-mark{font-size:9rem;color:#d0ef9b}.toolbar{display:flex;align-items:end;justify-content:space-between;margin:38px 0 18px;gap:20px}.toolbar h2,.admin h2{margin:0;font-size:1.6rem}.toolbar label{min-width:190px}.ticket-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.ticket{padding:22px;background:#1a2923;border:1px solid #3b5145;border-radius:13px}.ticket-top{display:flex;justify-content:space-between;color:#a4b5a5;font-size:.8rem}.ticket h3{font-size:1.35rem;margin:16px 0 4px}.price{font-size:2rem;font-weight:800;color:#d0ef9b;margin:16px 0}.muted{color:#a4b5a5;font-size:.88rem}.actions{display:flex;gap:8px;margin-top:18px}button,select,input{font:inherit}button{border:0;border-radius:7px;padding:10px 14px;cursor:pointer;font-weight:700}.primary{background:#d0ef9b;color:#172219}.danger{background:#4c302c;color:#ffcbc2}button:disabled{opacity:.45;cursor:not-allowed}select,input{width:100%;padding:10px;color:#f3f5f2;background:#14221c;border:1px solid #455b4d;border-radius:7px}label{display:block;color:#bac7bd;font-size:.85rem;margin-bottom:7px}.admin{display:grid;grid-template-columns:1fr 1fr;gap:35px;margin:38px 0;padding:25px;background:#192720;border:1px solid #3b5145;border-radius:13px}.admin p:not(.eyebrow){color:#a4b5a5}.admin form>label{margin-top:12px}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.admin button{width:100%;margin-top:18px}#message{min-height:24px;color:#d0ef9b}footer{padding:22px 0;color:#829287;border-top:1px solid #35443d;font-size:.85rem}@media(max-width:760px){.ticket-grid{grid-template-columns:repeat(2,1fr)}.admin{grid-template-columns:1fr}.hero-mark{font-size:6rem}}@media(max-width:520px){.shell{width:calc(100% - 24px)}.hero{padding:42px 0}.hero-mark{display:none}.ticket-grid{grid-template-columns:1fr}.toolbar{align-items:stretch;flex-direction:column}.tag{font-size:.65rem}}
+:root {
+    font-family:Inter,"Segoe UI",sans-serif;
+    color:#f3f5f2;
+    background:#101817;
+    font-synthesis:none
+}
+* {
+    box-sizing:border-box
+}
+body {
+    margin:0;
+    background:radial-gradient(ellipse at 80% 0,#293b32,#101817 50%);
+    min-height:100vh
+}
+.shell {
+    width:min(1100px,calc(100% - 36px));
+    margin:auto
+}
+header {
+    height:76px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid #35443d
+}
+.brand {
+    font-weight:900;
+    letter-spacing:.15em;
+    text-decoration:none;
+    color:#f3f5f2
+}
+.brand span,.hero h1 span {
+    color:#d0ef9b
+}
+.tag,.eyebrow {
+    color:#a4b5a5;
+    font-size:.75rem;
+    letter-spacing:.13em
+}
+.hero {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:62px 4%;
+    border-bottom:1px solid #35443d
+}
+.hero h1 {
+    font-size:clamp(2.8rem,7vw,5.2rem);
+    line-height:1.02;
+    letter-spacing:-.06em;
+    margin:12px 0
+}
+.hero p:not(.eyebrow) {
+    max-width:470px;
+    color:#a9b6ae
+}
+.hero-mark {
+    font-size:9rem;
+    color:#d0ef9b
+}
+.toolbar {
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
+    margin:38px 0 18px;
+    gap:20px
+}
+.toolbar h2,.admin h2 {
+    margin:0;
+    font-size:1.6rem
+}
+.toolbar label {
+    min-width:190px
+}
+.ticket-grid {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px
+}
+.ticket {
+    padding:22px;
+    background:#1a2923;
+    border:1px solid #3b5145;
+    border-radius:13px
+}
+.ticket-top {
+    display:flex;
+    justify-content:space-between;
+    color:#a4b5a5;
+    font-size:.8rem
+}
+.ticket h3 {
+    font-size:1.35rem;
+    margin:16px 0 4px
+}
+.price {
+    font-size:2rem;
+    font-weight:800;
+    color:#d0ef9b;
+    margin:16px 0
+}
+.muted {
+    color:#a4b5a5;
+    font-size:.88rem
+}
+.actions {
+    display:flex;
+    gap:8px;
+    margin-top:18px
+}
+button,select,input {
+    font:inherit
+}
+button {
+    border:0;
+    border-radius:7px;
+    padding:10px 14px;
+    cursor:pointer;
+    font-weight:700
+}
+.primary {
+    background:#d0ef9b;
+    color:#172219
+}
+.danger {
+    background:#4c302c;
+    color:#ffcbc2
+}
+button:disabled {
+    opacity:.45;
+    cursor:not-allowed
+}
+select,input {
+    width:100%;
+    padding:10px;
+    color:#f3f5f2;
+    background:#14221c;
+    border:1px solid #455b4d;
+    border-radius:7px
+}
+label {
+    display:block;
+    color:#bac7bd;
+    font-size:.85rem;
+    margin-bottom:7px
+}
+.admin {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:35px;
+    margin:38px 0;
+    padding:25px;
+    background:#192720;
+    border:1px solid #3b5145;
+    border-radius:13px
+}
+.admin p:not(.eyebrow) {
+    color:#a4b5a5
+}
+.admin form>label {
+    margin-top:12px
+}
+.two {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px
+}
+.admin button {
+    width:100%;
+    margin-top:18px
+}
+#message {
+    min-height:24px;
+    color:#d0ef9b
+}
+footer {
+    padding:22px 0;
+    color:#829287;
+    border-top:1px solid #35443d;
+    font-size:.85rem
+}
+@media(max-width:760px) {
+    .ticket-grid {
+        grid-template-columns:repeat(2,1fr)
+    }
+    .admin {
+        grid-template-columns:1fr
+    }
+    .hero-mark {
+        font-size:6rem
+    }
+}
+@media(max-width:520px) {
+    .shell {
+        width:calc(100% - 24px)
+    }
+    .hero {
+        padding:42px 0
+    }
+    .hero-mark {
+        display:none
+    }
+    .ticket-grid {
+        grid-template-columns:1fr
+    }
+    .toolbar {
+        align-items:stretch;
+        flex-direction:column
+    }
+    .tag {
+        font-size:.65rem
+    }
+}
