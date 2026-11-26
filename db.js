@@ -31,7 +31,6 @@ function all(sql, params = []) {
     });
 }
 
-// Создаём таблицу расписания и добавляем начальные примеры, если она пуста.
 async function initDatabase() {
     await run(
         'CREATE TABLE IF NOT EXISTS schedule (' +
